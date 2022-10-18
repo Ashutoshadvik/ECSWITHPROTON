@@ -1,0 +1,96 @@
+schema:
+  format:
+    openapi: "3.0.0"
+  environment_input_type: "FargateEnvironmentInput"
+  types:
+    FargateEnvironmentInput:
+      type: object
+      description: "Input properties for my environment"
+      properties:
+        vpc_cidr:
+          type: string
+          description: "The CIDR range for your VPC"
+          default: 10.0.0.0/16
+          pattern: ([0-9]{1,3}\.){3}[0-9]{1,3}($|/(16|18|24))
+        public_subnet_one_cidr:
+          type: string
+          description: "The CIDR range for public subnet one"
+          default: 10.0.0.0/24
+          pattern: ([0-9]{1,3}\.){3}[0-9]{1,3}($|/(16|18|24))
+        public_subnet_two_cidr:
+          type: string
+          description: "The CIDR range for public subnet two"
+          default: 10.0.1.0/24
+          pattern: ([0-9]{1,3}\.){3}[0-9]{1,3}($|/(16|18|24))
+        public_subnet_three_cidr:
+          type: string
+          description: "The CIDR range for public subnet three"
+          default: 10.0.2.0/24
+          pattern: ([0-9]{1,3}\.){3}[0-9]{1,3}($|/(16|18|24))
+        private_subnet_one_cidr:
+          type: string
+          description: "The CIDR range for private subnet one"
+          default: 10.0.64.0/18
+          pattern: ([0-9]{1,3}\.){3}[0-9]{1,3}($|/(16|18|24))
+        private_subnet_two_cidr:
+          type: string
+          description: "The CIDR range for private subnet two"
+          default: 10.0.128.0/18
+          pattern: ([0-9]{1,3}\.){3}[0-9]{1,3}($|/(16|18|24))
+        private_subnet_three_cidr:
+          type: string
+          description: "The CIDR range for private subnet three"
+          default: 10.0.192.0/18
+          pattern: ([0-9]{1,3}\.){3}[0-9]{1,3}($|/(16|18|24))
+        rds_subnet_one_cidr:
+          type: string
+          description: "The CIDR range for rds subnet one"
+          default: 10.0.3.0/24
+          pattern: ([0-9]{1,3}\.){3}[0-9]{1,3}($|/(16|18|24))
+        rds_subnet_two_cidr:
+          type: string
+          description: "The CIDR range for rds subnet two"
+          default: 10.0.4.0/24
+          pattern: ([0-9]{1,3}\.){3}[0-9]{1,3}($|/(16|18|24))
+        rds_subnet_three_cidr:
+          type: string
+          description: "The CIDR range for rds subnet three"
+          default: 10.0.5.0/24
+          pattern: ([0-9]{1,3}\.){3}[0-9]{1,3}($|/(16|18|24))
+        ecs_cluster_container_insights:
+          type: string
+          description: "Set ECS Cluster Container Insights to enabled (default) or disabled. "
+          default: enabled
+          enum: ["enabled", "disabled"]
+        acm_certificate_arn:
+          title: "Amazon Certificate Manager certificate ARN (optional)"
+          type: string
+          description: "Full ARN of an ACM certificate to configure as the default certificate for HTTPS listeners for the environment load balancer."
+          minLength: 1
+          maxLength: 200
+        loadbalancer_type:
+          title: "Load Balancer Type"
+          type: string
+          description: "Type of loadbalancer to front your service"
+          enum: ["application", "network"]
+          default: "application"
+        loadbalancer_deletion_protection:
+          title: "Load balancer deletion protection. Enable after successful deployment."
+          type: string
+          description: "Recommended to enable after successful deployment."
+          enum: ["true", "false"]
+        loadbalancer_security_policy:
+          title: "ELB security policy."
+          type: string
+          description: "The security policy that defines which protocols and ciphers are supported. For more information, see Security policies in the Application Load Balancers Guide and Security policies in the Network Load Balancers Guide."
+          enum:
+            [
+              "ELBSecurityPolicy-2016-08",
+              "LBSecurityPolicy-TLS-1-2-2017-01",
+              "ELBSecurityPolicy-TLS-1-2-Ext-2018-06",
+              "ELBSecurityPolicy-FS-2018-06",
+              "ELBSecurityPolicy-FS-1-2-2019-08",
+              "ELBSecurityPolicy-FS-1-2-Res-2019-08",
+              "ELBSecurityPolicy-FS-1-2-Res-2020-10",
+            ]
+          default: "ELBSecurityPolicy-TLS-1-2-Ext-2018-06"

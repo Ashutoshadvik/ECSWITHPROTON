@@ -1,0 +1,12 @@
+proton: EnvironmentSpec
+spec:
+  vpc_cidr: 10.0.0.0/16
+  public_subnet_one_cidr: 10.0.0.0/24
+  public_subnet_two_cidr: 10.0.1.0/24
+  public_subnet_three_cidr: 10.0.2.0/24
+  private_subnet_one_cidr: 10.0.64.0/18
+  private_subnet_two_cidr: 10.0.128.0/18
+  private_subnet_three_cidr: 10.0.192.0/18
+  rds_subnet_one_cidr: 10.0.3.0/24
+  rds_subnet_two_cidr: 10.0.4.0/24
+  rds_subnet_three_cidr: 10.0.5.0/24

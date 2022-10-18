@@ -1,0 +1,13 @@
+proton: ServiceSpec
+pipeline:
+  service_dir: app
+  dockerfile: Dockerfile
+  unit_test_command: echo 'add your unit test command here'
+instances:
+  - name: load-balanced-fargate-svc-prod
+    environment: fargate-env-prod
+spec:
+  ResourcePath: '/example/index.html'
+  FullyQualifiedDomainName: example.com
+  RequestInterval: 30
+  FailureThreshold: 3

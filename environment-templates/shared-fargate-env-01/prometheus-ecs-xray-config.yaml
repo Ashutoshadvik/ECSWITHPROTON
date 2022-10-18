@@ -1,0 +1,71 @@
+receivers:
+  prometheus:
+    config:
+      global:
+        scrape_interval: 15s
+        scrape_timeout: 10s
+      scrape_configs:
+        - job_name: "containerofferings"
+          static_configs:
+            - targets: [0.0.0.0:8080, 0.0.0.0:80]
+  awsecscontainermetrics:
+    collection_interval: 20s
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  memory_limiter:
+    limit_mib: 100
+    check_interval: 5s
+  filter:
+    metrics:
+      include:
+        match_type: strict
+        metric_names:
+          - ecs.task.memory.utilized
+          - ecs.task.memory.reserved
+          - ecs.task.cpu.utilized
+          - ecs.task.cpu.reserved
+          - ecs.task.network.rate.rx
+          - ecs.task.network.rate.tx
+          - ecs.task.storage.read_bytes
+          - ecs.task.storage.write_bytes
+
+exporters:
+  awsxray:
+    region: eu-west-1
+  awsprometheusremotewrite:
+    endpoint: %REPLACE%/api/v1/remote_write
+    aws_auth:
+      region: eu-west-1 %REPLACE%
+      service: "aps"
+  logging:
+    loglevel: debug
+extensions:
+  health_check:
+  pprof:
+    endpoint: :1888
+  zpages:
+    endpoint: :55679
+
+service:
+  extensions: [pprof, zpages, health_check]
+  pipelines:
+    metrics:
+      receivers: [prometheus]
+      exporters: [logging, awsprometheusremotewrite]
+    metrics/ecs:
+      receivers: [awsecscontainermetrics]
+      processors: [filter]
+      exporters: [logging, awsprometheusremotewrite]
+    traces:
+      processors:
+        - memory_limiter
+      receivers:
+        - otlp
+      exporters:
+        - awsxray
